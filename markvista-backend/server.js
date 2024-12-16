@@ -66,6 +66,12 @@ app.use((req, _, next) => {
 const _dirname = path.dirname("");
 const buildPath = path.join(_dirname, "../frontend/dist");
 app.use(express.static(buildPath));
+
+// Mounting the Child Apps at Specific Paths
+app.use("/api/auth", authRouter);
+app.use("/api/crypto", cryptoDetailsRouter);
+app.use("/api/users", userRouter); // Mounting User App
+app.use("/api/community", communityRouter); // Mounting Community App
 app.get("/", function (req, res) {
   res.sendFile(
     path.join(__dirname, "../markvista-frontend/dist/index.html"),
@@ -76,12 +82,6 @@ app.get("/", function (req, res) {
     }
   );
 });
-
-// Mounting the Child Apps at Specific Paths
-app.use("/api/auth", authRouter);
-app.use("/api/crypto", cryptoDetailsRouter);
-app.use("/api/users", userRouter); // Mounting User App
-app.use("/api/community", communityRouter); // Mounting Community App
 
 app.all("*", (req, res, next) => {
   const err = new Error(`Cannot find ${req.originalUrl} on this server!`);
